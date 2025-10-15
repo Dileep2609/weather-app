@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/yourusername/weather-app.git'
+                git 'https://github.com/Dileep2609/weather-app.git'
             }
         }
         stage('Build Docker Image') {
