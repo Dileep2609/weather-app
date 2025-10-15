@@ -1,7 +1,8 @@
 pipeline {
     agent any
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout Code') {
             steps {
                 git 'https://github.com/yourusername/weather-app.git'
             }
@@ -11,14 +12,15 @@ pipeline {
                 sh 'docker build -t weather-app .'
             }
         }
-        stage('Run Docker Container') {
+        stage('Test Application') {
             steps {
-                sh '''
-                if docker ps -q --filter "name=weather-app-container" | grep -q .; then
-                    docker rm -f weather-app-container
-                fi
-                docker run -d -p 5000:5000 --name weather-app-container weather-app
-                '''
+                sh 'echo "Running tests..."'
+                sh 'python -m py_compile app.py'
+            }
+        }
+        stage('Deploy Container') {
+            steps {
+                sh 'docker run -d -p 5000:5000 --name weather-container weather-app || docker restart weather-container'
             }
         }
     }
